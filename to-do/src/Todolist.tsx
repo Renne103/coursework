@@ -1,6 +1,10 @@
 import { ChangeEvent } from "react";
 import { FilterValuesType } from "./App";
 import { AddItemForm } from "./AddItemForm";
+import { IconButton } from "@mui/material";
+import { Button } from "@mui/material";
+import { Delete } from "@mui/icons-material";
+import { green } from "@mui/material/colors";
 
 export type TaskType = {
   id: string; //long id
@@ -45,7 +49,9 @@ export function Todolist(props: PropsType) {
     <div>
       <h3>
         {props.title}
-        <button onClick={removeTodolist}>x</button>
+        <IconButton aria-label="delete" onClick={removeTodolist}>
+          <Delete />
+        </IconButton>
       </h3>
       <AddItemForm addItem={addTask}></AddItemForm>
       <ul>
@@ -64,30 +70,38 @@ export function Todolist(props: PropsType) {
                 checked={t.isDone}
               />
               <span>{t.title}</span>
-              <button onClick={onRemoveHandler}>x</button>
+              <IconButton aria-label="delete" onClick={onRemoveHandler}>
+                <Delete />
+              </IconButton>
             </li>
           );
         })}
       </ul>
       <div>
-        <button
+        <Button
           className={props.filter === "all" ? "active-filter" : ""}
           onClick={onAllClickHandler}
         >
           All
-        </button>
-        <button
+        </Button>
+        <Button
           className={props.filter === "active" ? "active-filter" : ""}
           onClick={onActiveClickHandler}
+          variant={"outlined"}
+          sx={{
+            borderRadius: "8xp",
+            bgcolor: green[500],
+            "&:hover": { bgcolor: green[300] },
+          }}
         >
           Active
-        </button>
-        <button
+        </Button>
+        <Button
           className={props.filter === "completed" ? "active-filter" : ""}
           onClick={onCompletedClickHandler}
         >
           Completed
-        </button>
+        </Button>
       </div>
     </div>
   );

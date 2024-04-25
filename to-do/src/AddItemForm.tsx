@@ -1,4 +1,6 @@
 import { ChangeEvent, KeyboardEvent, useState } from "react";
+import { Button } from "@mui/material";
+import { deepPurple } from "@mui/material/colors";
 
 type AddItemFormPropsType = {
   addItem: (title: string) => void;
@@ -20,7 +22,7 @@ export function AddItemForm(props: AddItemFormPropsType) {
     setNewTaskTitle(e.currentTarget.value);
   };
 
-  const addTask = () => {
+  const addItem = () => {
     if (newTaskTitle.trim() === "") {
       setError("Title is required");
     }
@@ -36,7 +38,19 @@ export function AddItemForm(props: AddItemFormPropsType) {
         onKeyPress={onKeyPressHandler}
         className={error ? "error" : ""}
       />
-      <button onClick={addTask}>+</button>
+      <Button
+        onClick={addItem}
+        variant={"contained"}
+        color={"primary"}
+        sx={{
+          borderRadius: "8xp",
+          bgcolor: deepPurple[500],
+          "&:hover": { bgcolor: deepPurple[300] },
+        }}
+      >
+        +
+      </Button>
+
       {error && <div className="error-message">{error}</div>}
     </div>
   );
