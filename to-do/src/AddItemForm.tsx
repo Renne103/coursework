@@ -1,6 +1,6 @@
 import { ChangeEvent, KeyboardEvent, useState } from "react";
-import { Button } from "@mui/material";
-import { deepPurple } from "@mui/material/colors";
+import { IconButton, TextField } from "@mui/material";
+import { Add } from "@mui/icons-material";
 
 type AddItemFormPropsType = {
   addItem: (title: string) => void;
@@ -32,26 +32,22 @@ export function AddItemForm(props: AddItemFormPropsType) {
 
   return (
     <div>
-      <input
+      <TextField
+        variant="outlined"
+        label={"Type task name"}
         value={newTaskTitle}
         onChange={onNewTitleChangeHandler}
         onKeyPress={onKeyPressHandler}
-        className={error ? "error" : ""}
+        error={!!error}
+        helperText={error}
       />
-      <Button
+      <IconButton
         onClick={addItem}
-        variant={"contained"}
-        color={"primary"}
-        sx={{
-          borderRadius: "8xp",
-          bgcolor: deepPurple[500],
-          "&:hover": { bgcolor: deepPurple[300] },
-        }}
       >
-        +
-      </Button>
-
-      {error && <div className="error-message">{error}</div>}
+        <Add />
+      </IconButton>
     </div>
   );
 }
+
+
