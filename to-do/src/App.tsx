@@ -5,7 +5,7 @@ import "./App.css";
 import { AddItemForm } from "./AddItemForm.tsx";
 
 export type FilterValuesType = "all" | "completed" | "active";
-type TodolistType = {
+export type TodolistType = {
   id: string;
   title: string;
   filter: FilterValuesType;
@@ -45,6 +45,26 @@ function App() {
     if (task) {
       task.isDone = isDone;
       setTasks({ ...tasksObj });
+    }
+  }
+
+  function changeTaskTitle(taskId: string, newTitle: string, todolistId: string) {
+    // достанем нужный массив по todolistId
+    let tasks = tasksObj[todolistId];
+    // находим нужный task
+    let task = tasks.find((t) => t.id === taskId);
+    // изменяем task, если он нашёлся
+    if (task) {
+      task.title = newTitle;
+      // засетаем в стейт копию объекта, чтобы React отреагировал перерисовкой
+      setTasks({ ...tasksObj });
+    }
+  }
+  function changeTodolistTitle ( todolistId: string, newTitle: string) {
+    const todolist = todolists.find(tl => tl.id === todolistId)
+    if (todolist){
+      todolist.title = newTitle;
+      setTodolists([...todolists])
     }
   }
 
@@ -109,8 +129,10 @@ function App() {
             changeFilter={changeFilter}
             addTask={addTask}
             changeTaskStatus={changeStatus}
+            changeTaskTitle={changeTaskTitle}
             filter={tl.filter}
             removeTodolist={removeTodolist}
+            changeTodolistTitle={changeTodolistTitle}
           />
         );
       })}
