@@ -1,0 +1,10 @@
+.add-item-form-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.text-field {
+    flex-grow: 1;
+    margin-right: 10px;
+}

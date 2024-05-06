@@ -1,17 +1,17 @@
 .button-outlined {
-  border-radius: 8px;
-  font-size: 1rem;
-  text-transform: none;
-  border: 2px solid transparent;
-  border-color: #376933;
-  color: black;
+    border-radius: 8px;
+    font-size: 1rem;
+    text-transform: none;
+    border: 2px solid transparent;
+    border-color: #376933;
+    color: black;
 }
 .button-outlined:hover {
-  border-radius: 8px;
-  font-size: 1rem;
-  text-transform: none;
-  border: 2px solid transparent;
-  border-color: #376933;
-  background-color: #376933;
-  color: white;
+    border-radius: 8px;
+    font-size: 1rem;
+    text-transform: none;
+    border: 2px solid transparent;
+    border-color: #376933;
+    background-color: #376933;
+    color: white;
 }
