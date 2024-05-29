@@ -4,7 +4,7 @@ export default {
   theme: {
     extend: {
       backgroundImage: {
-        auth: 'linear-gradient(315deg, #fff 0%, #fad4e4 100%)',
+        auth: 'linear-gradient(315deg, #D4BAE8 0%, #FFF1FE 100%)',
       },
       boxShadow: {
         task: 'box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.08)',
