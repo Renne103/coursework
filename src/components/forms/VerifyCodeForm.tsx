@@ -33,11 +33,14 @@ export const VerifyCodeForm = ({
         navigate(hasBeenRegistered ? '/sign-in' : '/sign-up')
       } catch (e) {
         showError(e)
-      } finally {
-        console.log(onActionEnd)
+      } 
+      finally {
+        //setOtp("")
+        //console.log(onActionEnd)
         onActionEnd?.()
       }
     })()
+    console.log('test')
   }, [otp, codeLength])
 
   return (

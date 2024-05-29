@@ -1,12 +1,11 @@
-import { NavLink } from 'react-router-dom'
+//import { NavLink } from 'react-router-dom'
 import { cn } from '../../utils/cn'
 
 import { FormEvent, useState } from 'react'
 import toast from 'react-hot-toast'
 import telegramImg from '../../assets/img/telegram.png'
 import {
-  useGenerateVerificationCodeMutation,
-  useVerifyAccountMutation,
+  useGenerateVerificationCodeMutation
 } from '../../store/auth/authApi'
 import { showError } from '../../utils/showError'
 import { Modal } from '../Modal/Modal'
@@ -19,8 +18,8 @@ interface Props {
 export const TwoFactorAuthForm = ({ className }: Props) => {
   const [generateVerificationCode, { isLoading }] =
     useGenerateVerificationCodeMutation()
-  const [verifyAccount, { isLoading: isVerifyLoading }] =
-    useVerifyAccountMutation()
+  // const [verifyAccount, { isLoading: isVerifyLoading }] =
+  //   useVerifyAccountMutation()
   const [telegramId, setTelegramId] = useState('')
 
   console.log(telegramId)
@@ -35,14 +34,9 @@ export const TwoFactorAuthForm = ({ className }: Props) => {
       toast.error('Please provide telegram ID')
       return
     }
-
+    
     try {
-      const code = await generateVerificationCode({ telegramId }).unwrap()
-
-      await verifyAccount({
-        code,
-        telegramId,
-      }).unwrap()
+      await generateVerificationCode({ telegramId }).unwrap()
       setTelegramId(telegramId)
 
       form.reset()
@@ -58,7 +52,7 @@ export const TwoFactorAuthForm = ({ className }: Props) => {
         className={cn('py-14 px-10 bg-white rounded-[10px]', className)}
       >
         <fieldset
-          disabled={isLoading || isVerifyLoading}
+          disabled={isLoading}
           className="border-none p-0"
         >
           <h1 className="text-5xl font-medium text-center mb-[115px]">
@@ -80,16 +74,16 @@ export const TwoFactorAuthForm = ({ className }: Props) => {
           </div>
 
           <button
-            disabled={isLoading || isVerifyLoading}
+            disabled={isLoading}
             className="rounded-[20px] w-full bg-white text-xl p-5 flex items-center justify-center gap-x-3 disabled:cursor-not-allowed border-[1px] border-black mb-[110px]"
           >
             <img width={40} height={40} src={telegramImg} alt="telegram" />
-            {isLoading || isVerifyLoading
+            {isLoading
               ? 'Loading...'
               : 'Confirm your Telegram'}
           </button>
 
-          <span className="flex items-center gap-x-3 justify-center">
+          {/* <span className="flex items-center gap-x-3 justify-center">
             Already have an account?
             <NavLink
               to="/sign-in"
@@ -97,7 +91,7 @@ export const TwoFactorAuthForm = ({ className }: Props) => {
             >
               Sign in
             </NavLink>
-          </span>
+          </span> */}
         </fieldset>
       </form>
 
