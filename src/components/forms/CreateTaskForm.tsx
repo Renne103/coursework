@@ -71,8 +71,8 @@ export const CreateTaskForm = ({
           <span className="text-xl block mb-4 capitalize">Description</span>
           <textarea
             {...register('description')}
-            required
             className="rounded-[10px] px-2 py-4 bg-[#eff6ed] mb-14 focus:outline-none block w-full resize-none "
+            placeholder="optional"
           />
 
           <div className="flex flex-col gap-y-9 w-[350px] mb-14">

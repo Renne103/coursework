@@ -4,7 +4,7 @@ import {
   CreateTaskResponse,
   DeleteTaskResponse,
   GetTasksByFilterResponse,
-  GetTasksByFulterRequest,
+  GetTasksByFilterRequest,
   GetTasksRequest,
   GetTasksResponse,
   Task,
@@ -24,7 +24,7 @@ const taskApi = baseApi.injectEndpoints({
 
     getTasksByFilter: builder.query<
       GetTasksByFilterResponse,
-      GetTasksByFulterRequest
+      GetTasksByFilterRequest
     >({
       query: filters => ({
         url: '/task/find-by-filter',

@@ -56,7 +56,7 @@ export const TwoFactorAuthForm = ({ className }: Props) => {
           className="border-none p-0"
         >
           <h1 className="text-5xl font-medium text-center mb-[115px]">
-            2-Factor Authorization
+            Verify Account
           </h1>
 
           <div className="space-y-[30px] mb-16">

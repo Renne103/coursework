@@ -10,7 +10,7 @@ export interface Task {
   data: string
   deadline: string
   status: TaskStatus
-  description: string
+  description?: string
 }
 
 export type GetTasksResponse = Task[]
@@ -20,7 +20,7 @@ export interface GetTasksRequest {
 }
 
 export type GetTasksByFilterResponse = Task[]
-export interface GetTasksByFulterRequest {
+export interface GetTasksByFilterRequest {
   deadline?: {
     dateFrom: string
     dateTo: string

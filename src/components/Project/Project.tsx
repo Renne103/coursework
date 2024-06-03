@@ -18,6 +18,7 @@ export const Project = ({ className, id, name }: Props) => {
   const [deleteProject, { isLoading }] = useDeleteProjectMutation()
   const [updateProject, { isLoading: updateLoading }] =
     useUpdateProjectMutation()
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, setSearchParams] = useSearchParams()
 
   const onDeleteProject = async () => {
