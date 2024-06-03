@@ -49,6 +49,7 @@ export const UpdateTaskForm = ({
   const {
     register,
     handleSubmit,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     formState: { errors },
   } = useForm<UpdateTaskSchema>({
     resolver: zodResolver(updateTaskSchema),
@@ -140,6 +141,7 @@ export const UpdateTaskForm = ({
               <span className="capitalize text-xl">Deadline</span>
               <input
                 ref={ref}
+                defaultValue={taskData.deadline}
                 className="border-[1px] py-2 px-4 rounded-[10px] focus:outline-none select-none outline-none"
                 type="datetime-local"
               />
