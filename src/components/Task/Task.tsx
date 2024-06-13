@@ -1,4 +1,6 @@
+import clockIcon from '../../assets/icons/clock.svg'
 import deleteIcon from '../../assets/icons/delete.svg'
+
 import {
   useDeleteTaskMutation,
   useUpdateTaskMutation,
@@ -14,7 +16,14 @@ interface Props extends ITask {
   projectId: number
 }
 
-export const Task = ({ className, data, id, status, projectId }: Props) => {
+export const Task = ({
+  className,
+  data,
+  id,
+  projectId,
+  deadline,
+  status,
+}: Props) => {
   const [deleteTask, { isLoading }] = useDeleteTaskMutation()
   const [updateTaskStatus, { isLoading: updateLoading }] =
     useUpdateTaskMutation()
@@ -66,9 +75,22 @@ export const Task = ({ className, data, id, status, projectId }: Props) => {
           checked={status === TaskStatus.DONE}
           onChange={onTaskUpdate}
         />
-        {/*</label>*/}
 
-        <span className="text-xl">{data}</span>
+        <div className="flex flex-col gap-y-1">
+          <span className="text-xl">{data}</span>
+          <span className="flex items-center gap-x-1">
+            {deadline && <img src={clockIcon} alt="deadline" />}
+            <span>
+              {deadline && (
+                <>
+                  {new Date(deadline).getDate().toString().padStart(2, '0')} /{' '}
+                  {new Date(deadline).getMonth() + 1},
+                </>
+              )}
+              {status}
+            </span>
+          </span>
+        </div>
         <button
           disabled={isLoading}
           onClick={onTaskDelete}
