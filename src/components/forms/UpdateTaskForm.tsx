@@ -1,7 +1,8 @@
 import { Select } from '@headlessui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
+import ringIcon from '../../assets/icons/ring.svg'
 import { TASK_STATUS } from '../../const/task'
 import {
   UpdateTaskSchema,
@@ -13,9 +14,12 @@ import {
   useGetTaskQuery,
   useUpdateTaskMutation,
 } from '../../store/task/taskApi'
+import { PendingNotification } from '../../store/task/types'
 import { cn } from '../../utils/cn'
 import { showError } from '../../utils/showError'
+import { AddNotification } from '../AddNotification/AddNotification'
 import { Loader } from '../Loader/Loader'
+import { Modal } from '../Modal/Modal'
 
 interface Props {
   className?: string
@@ -44,14 +48,10 @@ export const UpdateTaskForm = ({
   } = useGetTaskQuery(taskId)
   const [updateTask, { isLoading }] = useUpdateTaskMutation()
   const [deleteTask, { isLoading: deleteLoading }] = useDeleteTaskMutation()
+  const [notifications, setNotifications] = useState<PendingNotification[]>([])
   const ref = useRef<HTMLInputElement | null>(null)
 
-  const {
-    register,
-    handleSubmit,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    formState: { errors },
-  } = useForm<UpdateTaskSchema>({
+  const { register, handleSubmit } = useForm<UpdateTaskSchema>({
     resolver: zodResolver(updateTaskSchema),
   })
 
@@ -79,8 +79,6 @@ export const UpdateTaskForm = ({
         iso?.slice(iso?.indexOf('T') + 1, iso?.indexOf('.'))
     }
 
-    console.log(description, data, status, updatedProjectId)
-
     try {
       await updateTask({
         id: taskId,
@@ -89,6 +87,9 @@ export const UpdateTaskForm = ({
         description,
         data,
         ...(date && { deadline: date }),
+        ...(notifications.length && {
+          pendingNotifications: notifications,
+        }),
       }).unwrap()
       onActionEnd?.()
     } catch (error) {
@@ -137,7 +138,7 @@ export const UpdateTaskForm = ({
           />
 
           <div className="flex flex-col gap-y-9 w-[350px] mb-14">
-            <div className="flex items-center justify-between w-full">
+            <div className="flex items-center justify-between w-full gap-x-5">
               <span className="capitalize text-xl">Deadline</span>
               <input
                 ref={ref}
@@ -145,6 +146,38 @@ export const UpdateTaskForm = ({
                 className="border-[1px] py-2 px-4 rounded-[10px] focus:outline-none select-none outline-none"
                 type="datetime-local"
               />
+              <Modal>
+                <Modal.Open
+                  renderTrigger={openModal => (
+                    <button
+                      type="button"
+                      onClick={openModal}
+                      className="cursor-pointer !w-[20px] !h-[20px] block"
+                    >
+                      <img
+                        src={ringIcon}
+                        className="!w-[20px] !h-[20px] max-w-[20px]"
+                        alt="ring"
+                      />
+                    </button>
+                  )}
+                />
+                <Modal.Content
+                  renderContent={() => {
+                    return (
+                      <ul className="rounded-[12px] p-5 flex flex-col gap-y-2 w-[300px] max-h-[400px] h-full overflow-y-auto">
+                        {taskData.pendingNotifications.map(
+                          ({ amount, timeType }) => (
+                            <li className="text-[#a377a8] font-bold text-xl [word-spacing:30px]">
+                              {amount} {timeType.toLowerCase()}
+                            </li>
+                          )
+                        )}
+                      </ul>
+                    )
+                  }}
+                />
+              </Modal>
             </div>
             <div className="flex items-center justify-between w-full">
               <span className="capitalize text-xl">Project</span>
@@ -178,6 +211,13 @@ export const UpdateTaskForm = ({
                 ))}
               </Select>
             </div>
+
+            <AddNotification
+              className="flex flex-col gap-y-9 w-[350px] "
+              onSetNotification={notification =>
+                setNotifications(prev => [...prev, notification])
+              }
+            />
           </div>
         </div>
 
