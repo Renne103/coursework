@@ -14,7 +14,7 @@ import {
   useGetTaskQuery,
   useUpdateTaskMutation,
 } from '../../store/task/taskApi'
-import { PendingNotification } from '../../store/task/types'
+import { PendingNotification, Task, TaskStatus } from '../../store/task/types'
 import { cn } from '../../utils/cn'
 import { showError } from '../../utils/showError'
 import { AddNotification } from '../AddNotification/AddNotification'
@@ -23,7 +23,9 @@ import { Modal } from '../Modal/Modal'
 
 interface Props {
   className?: string
-  onActionEnd?: () => void
+  onActionEnd?: (
+    data?: Partial<Pick<Task, 'data' | 'deadline' | 'status'>>
+  ) => void
   taskId: number
   projectId: number
 }
@@ -86,12 +88,18 @@ export const UpdateTaskForm = ({
         status,
         description,
         data,
-        ...(date && { deadline: date }),
+
         ...(notifications.length && {
           pendingNotifications: notifications,
         }),
       }).unwrap()
-      onActionEnd?.()
+      onActionEnd?.({
+        data,
+        status,
+        ...((status === TaskStatus.DONE || date) && {
+          deadline: status === TaskStatus.DONE ? undefined : date,
+        }),
+      })
     } catch (error) {
       showError(error)
     }

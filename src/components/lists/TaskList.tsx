@@ -69,7 +69,7 @@ export const TaskList = ({ className, projectId }: Props) => {
     ul.addEventListener('scroll', handler)
 
     return () => ul.removeEventListener('scroll', handler)
-  }, [data?.length, tasks.length, isLoading, isFetching])
+  }, [data?.length, tasks.length, isLoading, isFetching, page])
 
   if (isError) return null
   if (isLoading || !data)
@@ -81,7 +81,6 @@ export const TaskList = ({ className, projectId }: Props) => {
 
   return (
     <>
-      {' '}
       <ul
         ref={ulRef}
         className={cn(
@@ -91,7 +90,29 @@ export const TaskList = ({ className, projectId }: Props) => {
       >
         {tasks.map(t => (
           <li key={t.id}>
-            <Task projectId={projectId} {...t} />
+            <Task
+              onUpdateTask={data =>
+                setTasks(prev =>
+                  prev.map(t =>
+                    t.id === data.id
+                      ? {
+                          ...t,
+                          ...data,
+                          deadline:
+                            data.deadline === undefined
+                              ? undefined
+                              : t.deadline,
+                        }
+                      : t
+                  )
+                )
+              }
+              onDeleteTask={id =>
+                setTasks(prev => prev.filter(t => t.id !== id))
+              }
+              projectId={projectId}
+              {...t}
+            />
           </li>
         ))}
       </ul>

@@ -14,6 +14,12 @@ import { UpdateTaskForm } from '../forms/UpdateTaskForm'
 interface Props extends ITask {
   className?: string
   projectId: number
+  onDeleteTask: (taskId: ITask['id']) => void
+  onUpdateTask: (
+    data: { id: ITask['id'] } & Partial<
+      Pick<ITask, 'deadline' | 'status' | 'data'>
+    >
+  ) => void
 }
 
 export const Task = ({
@@ -23,6 +29,8 @@ export const Task = ({
   projectId,
   deadline,
   status,
+  onDeleteTask,
+  onUpdateTask,
 }: Props) => {
   const [deleteTask, { isLoading }] = useDeleteTaskMutation()
   const [updateTaskStatus, { isLoading: updateLoading }] =
@@ -31,6 +39,7 @@ export const Task = ({
   const onTaskDelete = async () => {
     try {
       await deleteTask(id).unwrap()
+      onDeleteTask(id)
     } catch (error) {
       showError(error)
     }
@@ -38,12 +47,17 @@ export const Task = ({
 
   const onTaskUpdate = async () => {
     try {
+      const newStatus = TaskStatus.BACKLOG
+        ? TaskStatus.DONE
+        : TaskStatus.BACKLOG
       await updateTaskStatus({
         id,
         data,
         status:
           status === TaskStatus.BACKLOG ? TaskStatus.DONE : TaskStatus.BACKLOG,
+        ...(status === TaskStatus.DONE && { deadline: undefined }),
       })
+      onUpdateTask({ id, status: newStatus })
     } catch (error) {
       showError(error)
     }
@@ -105,7 +119,14 @@ export const Task = ({
           <UpdateTaskForm
             projectId={projectId}
             taskId={id}
-            onActionEnd={closeModal}
+            onActionEnd={data => {
+              closeModal()
+              if (!data) return
+              onUpdateTask({
+                id,
+                ...data,
+              })
+            }}
           />
         )}
       />
